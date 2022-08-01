@@ -1,0 +1,34 @@
+<script setup lang="ts">
+import ContainerAside from './components/ContainerAside.vue'
+import StatusBar from './components/StatusBar.vue'
+import ContainerFooter from './components/ContainerFooter.vue'
+</script>
+
+<template>
+  <StatusBar />
+  <div flex class="h-[calc(100vh-1.75rem-6rem)]">
+    <ContainerAside />
+    <RouterView />
+  </div>
+  <ContainerFooter />
+  <div class="bg" opacity-65 backdrop-blur z--9999></div>
+</template>
+
+<style lang="scss">
+@use "./assets/share.css";
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 0.25rem;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://tailwindcss.com/_next/static/media/hero@75.4dea7abe609fc522c039fba7662ceea2.jpg');
+  z-index: -1;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body {
+  background-color: transparent;
+}
+</style>
