@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { useVirtualList, useDateFormat } from '@vueuse/core'
+import {
+  useVirtualList,
+  useDateFormat,
+  useFetch,
+  useDebounceFn
+} from '@vueuse/core'
 import request from '@/api'
-import { computed } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 
 const searchName = $ref('')
 let allItems = $ref<
@@ -13,7 +18,38 @@ let allItems = $ref<
   }[]
 >([])
 
+let isShowList = $ref<boolean>(true)
+let isShowLoading = $ref<boolean>(true)
+
+// 使用代理服务器避免部分接口跨域问题
+const { data } = await useFetch('/api/search/hot/detail').get().json()
+const hotSearch = data.value?.data
+
+onMounted(() => {
+  isShowLoading = false
+})
+
+watch(
+  () => searchName,
+  useDebounceFn(() => {
+    if (searchName.length < 1) {
+      isShowList = true
+      isShowLoading = false
+    } else {
+      isShowList = false
+      isShowLoading = true
+      searchStart()
+    }
+  }, 350),
+  {
+    immediate: true
+  }
+)
+
 const searchStart = async () => {
+  if (searchName.length < 1) {
+    return
+  }
   allItems = []
   const res = await request({
     url:
@@ -32,13 +68,8 @@ const searchStart = async () => {
         .replace(',', '、')
     })
   })
-  const resu = request({
-    url:
-      `/search/hot/detail` +
-      import.meta.env.VITE_APP_ENDURL,
-    method: 'POST'
-  })
-  console.log(resu)
+  isShowList = false
+  isShowLoading = false
 }
 
 const filteredList = computed(() => allItems)
@@ -86,6 +117,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
       space-x-4
       items-center
       justify-between
+      v-show="!isShowList"
     >
       <div class="w-1/15" ml justify-self-start>排序</div>
       <div justify-self-start>收藏</div>
@@ -93,7 +125,12 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
       <div class="w-1/5" justify-self-start>歌手</div>
       <div class="w-1/5" justify-self-start>时长</div>
     </div>
-    <div v-bind="(containerProps as any)" class="h-[calc(100%-8.5rem)]">
+    <el-skeleton :rows="20" animated v-show="isShowLoading" />
+    <div
+      v-show="!isShowList && !isShowLoading"
+      v-bind="(containerProps as any)"
+      class="h-[calc(100%-8.5rem)]"
+    >
       <div v-bind="wrapperProps">
         <div
           v-for="item in list"
@@ -115,6 +152,18 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
           <div class="w-1/5" justify-self-start>{{ item.data.dt }}</div>
         </div>
       </div>
+    </div>
+    <div v-show="isShowList" overflow-y-auto class="p-x-15%">
+      <h2 text-2xl text-sky-400>热搜列表</h2>
+      <p
+        mt-3
+        border-b-1
+        border-zinc-400
+        v-for="item in hotSearch"
+        :key="item.score"
+      >
+        {{ item.searchWord }} - {{ item.content }}
+      </p>
     </div>
   </div>
 </template>

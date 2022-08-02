@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     ContainerHeader: typeof import('./src/components/ContainerHeader.vue')['default']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     RouterLink: typeof import('vue-router')['RouterLink']
