@@ -2,15 +2,22 @@
 import { appWindow } from '@tauri-apps/api/window'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { iconList } from './iconList'
 
 const router = useRouter()
 const titlebarMinimize = $ref<null | HTMLElement>(null)
 const titlebarMaximize = $ref<null | HTMLElement>(null)
 const titlebarClose = $ref<null | HTMLElement>(null)
+let maxIcon: string = $ref(iconList[0])
 
 onMounted(() => {
   titlebarMinimize?.addEventListener('click', () => appWindow.minimize())
-  titlebarMaximize?.addEventListener('click', () => appWindow.toggleMaximize())
+  titlebarMaximize?.addEventListener('click', async () => {
+    appWindow.toggleMaximize()
+    const isMin = await appWindow.isMaximized()
+    if (isMin) maxIcon = iconList[0]
+    else maxIcon = iconList[1]
+  })
   titlebarClose?.addEventListener('click', () => appWindow.close())
 })
 
@@ -39,7 +46,7 @@ const statusBar = $ref<
 ])
 
 const handlerBar = (shortcut: string) => {
-  switch(shortcut) {
+  switch (shortcut) {
     case 'F':
       router.push('/search')
       break
@@ -85,7 +92,7 @@ const handlerBar = (shortcut: string) => {
         ></div>
       </div>
       <div cursor-pointer ref="titlebarMaximize">
-        <div text-indigo-700 hover:text-sky-600 i-uil:window-maximize></div>
+        <div text-indigo-700 hover:text-sky-600 :class="maxIcon"></div>
       </div>
       <div cursor-pointer ref="titlebarClose">
         <div text-indigo-800 hover:text-sky-600 i-ion:close-round></div>

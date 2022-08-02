@@ -5,8 +5,11 @@ import {
   useFetch,
   useDebounceFn
 } from '@vueuse/core'
-import request from '@/api'
+import request, { cancelAllRequest } from '@/api'
 import { computed, watch, onMounted } from 'vue'
+import { useMusicPlay } from '@/store/musicPlay'
+
+const store = useMusicPlay()
 
 const searchName = $ref('')
 let allItems = $ref<
@@ -36,39 +39,41 @@ watch(
       isShowList = true
       isShowLoading = false
     } else {
+      // 避免请求冲突，上一个请求还没回来，下一个又来了，就取消上面所有，鬼知道卡了多少个请求
+      cancelAllRequest()
+      searchStart()
       isShowList = false
       isShowLoading = true
-      searchStart()
     }
-  }, 350),
+  }, 300),
   {
     immediate: true
   }
 )
 
 const searchStart = async () => {
-  if (searchName.length < 1) {
-    return
-  }
   allItems = []
-  const res = await request({
-    url:
-      `/cloudsearch?keywords=${searchName}&limit=100` +
-      import.meta.env.VITE_APP_ENDURL,
-    method: 'POST'
-  })
-  res?.result?.songs?.forEach((item: any) => {
-    allItems.push({
-      name: item.name,
-      dt: useDateFormat(item.dt, 'mm:ss').value,
-      id: item.id,
-      ar: item?.ar
-        ?.map((item: any) => item.name)
-        .toString()
-        .replace(',', '、')
+  try {
+    const res = await request({
+      url:
+        `/cloudsearch?keywords=${searchName}&limit=100` +
+        import.meta.env.VITE_APP_ENDURL,
+      method: 'POST'
     })
-  })
-  isShowList = false
+    res?.result?.songs?.forEach((item: any) => {
+      allItems.push({
+        name: item.name,
+        dt: useDateFormat(item.dt, 'mm:ss').value,
+        id: item.id,
+        ar: item?.ar
+          ?.map((item: any) => item.name)
+          .toString()
+          .replace(',', '、')
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
   isShowLoading = false
 }
 
@@ -76,20 +81,33 @@ const filteredList = computed(() => allItems)
 const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
   itemHeight: 22
 })
+
+const addSong = async (id: number, name: string) => {
+  const song = await request({
+    url: `/song/url?id=${id}` + import.meta.env.VITE_APP_ENDURL,
+    method: 'GET'
+  })
+  const data = song?.data[0]
+  store.addSongs({
+    id: data.id,
+    url: data.url,
+    name,
+    size: data.size,
+    type: data.type
+  })
+}
 </script>
 
 <template>
   <div h-full w-full class="lg:w-70% lg:mx-15%">
     <div h-24 flex justify-center items-center>
-      <div flex items-center w-70 lg:w-115 rounded border-2 border-sky-200>
+      <div flex items-center w-60 lg:w-100 rounded border-2 border-sky-200>
         <input
           type="text"
           class="inp"
           v-model="searchName"
           w-60
           lg:w-100
-          border-r-1
-          border-pink-200
           placeholder:italic
           placeholder:text-slate-400
           focus:outline-none
@@ -98,15 +116,6 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
           focus:ring-1
           sm:text-sm
         />
-        <div
-          text-xl
-          text-green-600
-          w-10
-          lg:w-15
-          cursor-pointer
-          i-material-symbols:search-rounded
-          @click="searchStart"
-        ></div>
       </div>
     </div>
     <div
@@ -140,8 +149,11 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
           border-b-1
           border-zinc-200
           space-x-4
+          last-of-type:pb-3
           items-center
           justify-between
+          hover:bg-blue-100
+          @click="addSong(item.data.id, item.data.name)"
         >
           <div class="w-1/15" ml justify-self-start>{{ item.index + 1 }}</div>
           <div justify-self-start text-lg i-mdi:cards-heart-outline></div>
