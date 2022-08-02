@@ -87,13 +87,16 @@ const addSong = async (id: number, name: string) => {
     url: `/song/url?id=${id}` + import.meta.env.VITE_APP_ENDURL,
     method: 'GET'
   })
-  const data = song?.data[0]
+  const { data } = await useFetch(`/api/search?keywords=${name}&limit=1`).get().json()
+  const data2 = song?.data[0]
   store.addSongs({
-    id: data.id,
-    url: data.url,
+    id: data2.id,
+    url: data2.url,
     name,
-    size: data.size,
-    type: data.type
+    size: data2.size,
+    type: data2.type,
+    pic: data.value?.result?.songs[0]?.album?.artist?.img1v1Url,
+    singer: data.value?.result?.songs[0]?.artists?.map((item: any) => item.name).toString().replace(',', '、')
   })
 }
 </script>

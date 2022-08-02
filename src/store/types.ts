@@ -4,4 +4,6 @@ export interface SongData {
   url: string
   type: string
   size: number
+  pic: string
+  singer: string
 }

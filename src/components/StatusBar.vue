@@ -32,6 +32,10 @@ const statusBar = $ref<
     shortcut: 'F'
   },
   {
+    name: '歌单',
+    shortcut: 'G'
+  },
+  {
     name: '收藏',
     shortcut: 'C'
   },
