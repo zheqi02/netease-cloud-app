@@ -87,16 +87,44 @@ const addSong = async (id: number, name: string) => {
     url: `/song/url?id=${id}` + import.meta.env.VITE_APP_ENDURL,
     method: 'GET'
   })
-  const { data } = await useFetch(`/api/search?keywords=${name}&limit=1`).get().json()
+  const { data } = await useFetch(`/api/search?keywords=${name}&limit=1`)
+    .get()
+    .json()
   const data2 = song?.data[0]
-  store.addSongs({
+  store.addSongAndPlay({
     id: data2.id,
     url: data2.url,
     name,
     size: data2.size,
     type: data2.type,
     pic: data.value?.result?.songs[0]?.album?.artist?.img1v1Url,
-    singer: data.value?.result?.songs[0]?.artists?.map((item: any) => item.name).toString().replace(',', '、')
+    singer: data.value?.result?.songs[0]?.artists
+      ?.map((item: any) => item.name)
+      .toString()
+      .replace(',', '、')
+  })
+}
+
+const addPush = async (id: number, name: string) => {
+  const song = await request({
+    url: `/song/url?id=${id}` + import.meta.env.VITE_APP_ENDURL,
+    method: 'GET'
+  })
+  const { data } = await useFetch(`/api/search?keywords=${name}&limit=1`)
+    .get()
+    .json()
+  const data2 = song?.data[0]
+  store.addSong({
+    id: data2.id,
+    url: data2.url,
+    name,
+    size: data2.size,
+    type: data2.type,
+    pic: data.value?.result?.songs[0]?.album?.artist?.img1v1Url,
+    singer: data.value?.result?.songs[0]?.artists
+      ?.map((item: any) => item.name)
+      .toString()
+      .replace(',', '、')
   })
 }
 </script>
@@ -132,7 +160,7 @@ const addSong = async (id: number, name: string) => {
       v-show="!isShowList"
     >
       <div class="w-1/15" ml justify-self-start>排序</div>
-      <div justify-self-start>收藏</div>
+      <div justify-self-start>添加</div>
       <div class="w-1/5" justify-self-start>歌曲</div>
       <div class="w-1/5" justify-self-start>歌手</div>
       <div class="w-1/5" justify-self-start>时长</div>
@@ -159,7 +187,18 @@ const addSong = async (id: number, name: string) => {
           @click="addSong(item.data.id, item.data.name)"
         >
           <div class="w-1/15" ml justify-self-start>{{ item.index + 1 }}</div>
-          <div justify-self-start text-lg i-mdi:cards-heart-outline></div>
+          <div
+            @click.stop="addPush(item.data.id, item.data.name)"
+            w-5
+            h-5
+          >
+            <div
+              cursor-pointer
+              justify-self-start
+              text-lg
+              i-mdi:cards-heart-outline
+            ></div>
+          </div>
           <div class="w-1/5" justify-self-start>{{ item.data.name }}</div>
           <div class="w-1/5" justify-self-start>
             {{ item.data.ar }}

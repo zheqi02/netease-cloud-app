@@ -16,7 +16,7 @@ export const useMusicPlay = defineStore('musicPlay', {
     totalTime: string
   } => ({
     playing: false,
-    loopMode: 'listLoop',
+    loopMode: '列表循环',
     current: 0,
     list: [],
     musicDom: new Audio(),
@@ -25,7 +25,8 @@ export const useMusicPlay = defineStore('musicPlay', {
     duration: 0,
     comTime: 0,
     comTimes: '00:00',
-    totalTime: '00:00'
+    totalTime: '00:00',
+
   }),
   actions: {
     pause() {
@@ -35,7 +36,14 @@ export const useMusicPlay = defineStore('musicPlay', {
         clearInterval(this.timer)
       }
     },
+    playStart(){
+      if (this.musicDom) {
+        this.musicDom.play()
+        this.playing = true
+      }
+    },
     play() {
+      if(this.list.length < 1) return
       if (this.musicDom) {
         this.musicDom.src = this.list[this.current].url
         this.musicDom.play()
@@ -45,17 +53,17 @@ export const useMusicPlay = defineStore('musicPlay', {
           this.duration = this.musicDom!.duration
           if (this.currentTime === this.duration) {
             switch (this.loopMode) {
-              case 'listLoop':
+              case '列表循环':
                 this.next()
                 break
-              case 'singleLoop':
+              case '单曲循环':
                 this.musicDom!.currentTime = 0
                 this.musicDom!.play()
                 break
-              case 'shuffle':
+              case '随机播放':
                 this.shuffle()
                 break
-              case 'endLoop':
+              case '顺序播放':
                 this.endLoop()
                 break
             }
@@ -118,6 +126,13 @@ export const useMusicPlay = defineStore('musicPlay', {
       this.addSongs(obj)
       this.current = 0
       this.play()
+    },
+    addSong(obj: SongData){
+      let flag = true
+      this.list.forEach(item => {
+        if (item.id === obj.id) flag = false
+      })
+      flag && this.list.push(obj)
     }
   },
   getters: {
@@ -131,7 +146,7 @@ export const useMusicPlay = defineStore('musicPlay', {
     },
     picUrl(state) {
       if (state.list.length < 1)
-        return 'https://tva4.sinaimg.cn/large/0072Vf1pgy1foxkc9gjl2j31hc0u0h7m.jpg'
+        return 'https://picsum.photos/200/300'
       return state.list[state.current].pic
     }
   }
