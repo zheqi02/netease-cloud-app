@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div text-red-500 rounded-br w-full>hello</div>
+  <div text-red-500 rounded-br h-full>hello</div>
 </template>
 
 <style scoped lang="scss">

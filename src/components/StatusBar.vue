@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const titlebarMinimize = $ref<null | HTMLElement>(null)
 const titlebarMaximize = $ref<null | HTMLElement>(null)
 const titlebarClose = $ref<null | HTMLElement>(null)
@@ -11,6 +13,38 @@ onMounted(() => {
   titlebarMaximize?.addEventListener('click', () => appWindow.toggleMaximize())
   titlebarClose?.addEventListener('click', () => appWindow.close())
 })
+
+const statusBar = $ref<
+  {
+    name: string
+    shortcut: string
+  }[]
+>([
+  {
+    name: '搜索',
+    shortcut: 'F'
+  },
+  {
+    name: '收藏',
+    shortcut: 'C'
+  },
+  {
+    name: '下载',
+    shortcut: 'D'
+  },
+  {
+    name: '设置',
+    shortcut: 'S'
+  }
+])
+
+const handlerBar = (shortcut: string) => {
+  switch(shortcut) {
+    case 'F':
+      router.push('/search')
+      break
+  }
+}
 </script>
 
 <template>
@@ -29,40 +63,16 @@ onMounted(() => {
     <div pl-2 flex items-center space-x-4 class="rainbow-text">
       <img rounded h-4 src="/favicon.ico" alt="" />
       <div
+        v-for="(item, index) in statusBar"
+        :key="index"
+        @click="handlerBar(item.shortcut)"
         cursor-pointer
         underline-blue-600
         hover:underline
         hover:underline-offset-2
         text-sm
       >
-        搜索(F)
-      </div>
-      <div
-        cursor-pointer
-        underline-blue-600
-        hover:underline
-        hover:underline-offset-2
-        text-sm
-      >
-        收藏(S)
-      </div>
-      <div
-        cursor-pointer
-        underline-blue-600
-        hover:underline
-        hover:underline-offset-2
-        text-sm
-      >
-        下载(V)
-      </div>
-      <div
-        cursor-pointer
-        underline-blue-600
-        hover:underline
-        hover:underline-offset-2
-        text-sm
-      >
-        设置(T)
+        {{ item.name }}({{ item.shortcut }})
       </div>
     </div>
     <div flex space-x-4 pr-2>

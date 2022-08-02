@@ -6,16 +6,20 @@ import ContainerFooter from './components/ContainerFooter.vue'
 
 <template>
   <StatusBar />
-  <div flex class="h-[calc(100vh-1.75rem-6rem)]">
+  <div flex w-screen class="h-[calc(100vh-1.75rem-6rem)]">
     <ContainerAside />
-    <RouterView />
+    <main class="w-[calc(100vw-200px)]" overflow-hidden>
+      <Suspense>
+        <RouterView />
+      </Suspense>
+    </main>
   </div>
   <ContainerFooter />
   <div class="bg" opacity-65 backdrop-blur z--9999></div>
 </template>
 
 <style lang="scss">
-@use "./assets/share.css";
+@use './assets/share.css';
 .bg {
   position: fixed;
   top: 0;

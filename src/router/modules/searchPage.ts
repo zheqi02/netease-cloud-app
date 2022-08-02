@@ -1,11 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router'
-import HomePage from '@/views/HomePage.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    name: 'home',
-    component: HomePage
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/SearchPage.vue')
   }
 ]
 

@@ -16,7 +16,7 @@
 .status-text {
   @apply text-transparent bg-clip-text;
   background-image: linear-gradient(
-    to top,
+    to left,
     #dbdcd7 0%,
     #dddcd7 24%,
     #e2c9cc 30%,
