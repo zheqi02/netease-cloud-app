@@ -9,9 +9,6 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ContainerAside: typeof import('./src/components/ContainerAside.vue')['default']
     ContainerFooter: typeof import('./src/components/ContainerFooter.vue')['default']
-    ContainerHeader: typeof import('./src/components/ContainerHeader.vue')['default']
-    ElInput: typeof import('element-plus/es')['ElInput']
-    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     ElSlider: typeof import('element-plus/es')['ElSlider']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']

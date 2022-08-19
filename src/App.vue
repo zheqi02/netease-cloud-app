@@ -5,7 +5,9 @@ import ContainerFooter from './components/ContainerFooter.vue'
 </script>
 
 <template>
-  <Suspense><StatusBar /></Suspense>
+  <Suspense>
+    <StatusBar />
+  </Suspense>
   <div flex w-screen class="h-[calc(100vh-1.75rem-6rem)]">
     <ContainerAside />
     <main class="w-[calc(100vw-200px)]" overflow-hidden>
@@ -13,16 +15,19 @@ import ContainerFooter from './components/ContainerFooter.vue'
         <template #default>
           <RouterView />
         </template>
-        <template #fallback> Loading... </template>
+        <template #fallback>
+          Loading...
+        </template>
       </Suspense>
     </main>
   </div>
   <ContainerFooter />
-  <div class="bg" opacity-65 backdrop-blur z--9999></div>
+  <div class="bg" opacity-65 backdrop-blur z--9999 />
 </template>
 
 <style lang="scss">
 @use './assets/share.css';
+
 .bg {
   position: fixed;
   top: 0;
@@ -35,6 +40,7 @@ import ContainerFooter from './components/ContainerFooter.vue'
   background-size: cover;
   background-repeat: no-repeat;
 }
+
 body {
   background-color: transparent;
 }

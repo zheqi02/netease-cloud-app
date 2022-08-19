@@ -1,5 +1,5 @@
-import type { RouteRecordRaw } from 'vue-router'
 import searchPage from '@/views/SearchPage.vue'
+import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {

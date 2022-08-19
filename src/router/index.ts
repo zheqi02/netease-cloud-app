@@ -9,7 +9,7 @@ const modules: Record<string, any> = import.meta.glob('./modules/*.ts', {
 }) // 引入所有路由文件
 for (const path in modules) {
   // 将每个路由文件的默认路由放入routes
-  routes.push(...modules[path].default) 
+  routes.push(...modules[path].default)
 }
 
 const router = createRouter({

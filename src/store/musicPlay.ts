@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { SongData } from './types'
+import type { SongData } from './types'
 
 export const useMusicPlay = defineStore('musicPlay', {
   state: (): {
@@ -25,8 +25,7 @@ export const useMusicPlay = defineStore('musicPlay', {
     duration: 0,
     comTime: 0,
     comTimes: '00:00',
-    totalTime: '00:00',
-
+    totalTime: '00:00'
   }),
   actions: {
     pause() {
@@ -36,14 +35,14 @@ export const useMusicPlay = defineStore('musicPlay', {
         clearInterval(this.timer)
       }
     },
-    playStart(){
+    playStart() {
       if (this.musicDom) {
         this.musicDom.play()
         this.playing = true
       }
     },
     play() {
-      if(this.list.length < 1) return
+      if (this.list.length < 1) return
       if (this.musicDom) {
         this.musicDom.src = this.list[this.current].url
         this.musicDom.play()
@@ -81,11 +80,11 @@ export const useMusicPlay = defineStore('musicPlay', {
           const totalSec = isNaN(Math.round(this.duration % 60))
             ? 0
             : Math.round(this.duration % 60)
-          this.comTimes = `${minu < 10 ? '0' + minu : minu}:${
-            sec < 10 ? '0' + sec : sec
+          this.comTimes = `${minu < 10 ? `0${minu}` : minu}:${
+            sec < 10 ? `0${sec}` : sec
           }`
-          this.totalTime = `${totalMinu < 10 ? '0' + totalMinu : totalMinu}:${
-            totalSec < 10 ? '0' + totalSec : totalSec
+          this.totalTime = `${totalMinu < 10 ? `0${totalMinu}` : totalMinu}:${
+            totalSec < 10 ? `0${totalSec}` : totalSec
           }`
         }, 1000)
       }
@@ -111,13 +110,16 @@ export const useMusicPlay = defineStore('musicPlay', {
       this.play()
     },
     clear() {
+      this.musicDom!.src = ''
+      this.musicDom!.currentTime = 0
+      this.comTime = 0
       this.list = []
       this.current = 0
       this.pause()
     },
     addSongs(obj: SongData) {
       let flag = true
-      this.list.forEach(item => {
+      this.list.forEach((item) => {
         if (item.id === obj.id) flag = false
       })
       flag && this.list.unshift(obj)
@@ -127,12 +129,17 @@ export const useMusicPlay = defineStore('musicPlay', {
       this.current = 0
       this.play()
     },
-    addSong(obj: SongData){
+    addSong(obj: SongData) {
       let flag = true
-      this.list.forEach(item => {
+      this.list.forEach((item) => {
         if (item.id === obj.id) flag = false
       })
       flag && this.list.push(obj)
+    },
+    delete() {
+      this.list.splice(this.current, 1)
+      this.current = 0
+      this.play()
     }
   },
   getters: {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useMusicPlay } from '@/store/musicPlay'
 
+const store = useMusicPlay()
 const router = useRouter()
 const activeName = $ref('first')
 
@@ -37,7 +39,10 @@ const handlerClick = async (id: number) => {
   menu.forEach(item => {
     item.active = item.id === id
   })
+}
 
+const deleteItem = () => {
+  store.delete()
 }
 </script>
 
@@ -65,7 +70,15 @@ const handlerClick = async (id: number) => {
           <div>{{ item.name }}</div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="播放列表" name="second">list</el-tab-pane>
+      <el-tab-pane label="播放列表" name="second">
+        <button border rounded @click="store.clear()">清空</button>
+        <ul mt>
+          <li flex v-for="item in store.list" :key="item.id">
+            <div>{{ item.name }}</div>
+            <button ml-2 border @click="deleteItem">删除</button>
+          </li>
+        </ul>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>

@@ -12,7 +12,7 @@ let maxIcon: string = $ref(iconList[0])
 
 onMounted(() => {
   titlebarMinimize?.addEventListener('click', () => appWindow.minimize())
-  titlebarMaximize?.addEventListener('click', async () => {
+  titlebarMaximize?.addEventListener('click', async() => {
     appWindow.toggleMaximize()
     const isMin = await appWindow.isMaximized()
     if (isMin) maxIcon = iconList[0]
@@ -60,49 +60,31 @@ const handlerBar = (shortcut: string) => {
 
 <template>
   <div
-    data-tauri-drag-region
-    border-b-1
-    border-zinc-400
-    rounded-tr
-    rounded-tl
-    flex
-    justify-between
-    items-center
-    h-7
+    data-tauri-drag-region border-b-1 border-zinc-400 rounded-tr rounded-tl flex justify-between items-center h-7
     w-screen
   >
     <div pl-2 flex items-center space-x-4 class="rainbow-text">
-      <img rounded h-4 src="/favicon.ico" alt="" />
+      <img rounded h-4 src="/favicon.ico" alt="">
       <div
-        v-for="(item, index) in statusBar"
-        :key="index"
-        @click="handlerBar(item.shortcut)"
-        cursor-pointer
-        underline-blue-600
-        hover:underline
-        hover:underline-offset-2
-        text-sm
+        v-for="(item, index) in statusBar" :key="index" cursor-pointer underline-blue-600 hover:underline
+        hover:underline-offset-2 text-sm @click="handlerBar(item.shortcut)"
       >
         {{ item.name }}({{ item.shortcut }})
       </div>
     </div>
     <div flex space-x-4 pr-2>
-      <div cursor-pointer ref="titlebarMinimize">
-        <div
-          text-indigo-600
-          hover:text-sky-600
-          text-xl
-          i-fluent:minimize-24-regular
-        ></div>
+      <div ref="titlebarMinimize" cursor-pointer>
+        <div text-indigo-600 hover:text-sky-600 text-xl i-fluent:minimize-24-regular />
       </div>
-      <div cursor-pointer ref="titlebarMaximize">
-        <div text-indigo-700 hover:text-sky-600 :class="maxIcon"></div>
+      <div ref="titlebarMaximize" cursor-pointer>
+        <div text-indigo-700 hover:text-sky-600 :class="maxIcon" />
       </div>
-      <div cursor-pointer ref="titlebarClose">
-        <div text-indigo-800 hover:text-sky-600 i-ion:close-round></div>
+      <div ref="titlebarClose" cursor-pointer>
+        <div text-indigo-800 hover:text-sky-600 i-ion:close-round />
       </div>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
