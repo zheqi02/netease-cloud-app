@@ -6,6 +6,7 @@ export const useMusicPlay = defineStore('musicPlay', {
     playing: boolean
     loopMode: string
     current: number
+    currentName: string
     list: SongData[]
     musicDom: HTMLAudioElement | null
     timer: any
@@ -15,6 +16,7 @@ export const useMusicPlay = defineStore('musicPlay', {
     comTimes: string
     totalTime: string
   } => ({
+    currentName: '',
     playing: false,
     loopMode: '列表循环',
     current: 0,
@@ -45,6 +47,7 @@ export const useMusicPlay = defineStore('musicPlay', {
       if (this.list.length < 1) return
       if (this.musicDom) {
         this.musicDom.src = this.list[this.current].url
+        this.currentName = this.list[this.current].name
         this.musicDom.play()
         this.playing = true
         this.timer = setInterval(() => {
@@ -143,8 +146,12 @@ export const useMusicPlay = defineStore('musicPlay', {
     },
     delete(songName: string) {
       this.list = this.list.filter(e => e.name !== songName)
-      this.current = 0
-      this.play()
+
+      if (songName === this.currentName) {
+        if (this.current !== this.list.length)
+          this.play()
+        else this.next()
+      }
     }
   },
   getters: {

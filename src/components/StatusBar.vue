@@ -78,13 +78,13 @@ const handlerBar = (shortcut: string) => {
     </div>
     <div flex space-x-4 pr-2>
       <div ref="titlebarMinimize" cursor-pointer>
-        <div text-indigo-600 hover:text-sky-600 text-xl i-fluent:minimize-24-regular />
+        <div text-sky-500 hover:text-sky-600 text-xl i-fluent:minimize-24-regular />
       </div>
       <div ref="titlebarMaximize" cursor-pointer>
-        <div text-indigo-700 hover:text-sky-600 :class="maxIcon" />
+        <div text-sky-600 hover:text-sky-600 :class="maxIcon" />
       </div>
       <div ref="titlebarClose" cursor-pointer>
-        <div text-indigo-800 hover:text-sky-600 i-ion:close-round />
+        <div text-sky-700 hover:text-sky-600 i-ion:close-round />
       </div>
     </div>
   </div>
