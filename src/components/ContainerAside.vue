@@ -30,13 +30,13 @@ const menu = $ref<
   }
 ])
 
-const handlerClick = async (id: number) => {
-  switch(id) {
+const handlerClick = async(id: number) => {
+  switch (id) {
     case 1:
       router.push('/')
       break
   }
-  menu.forEach(item => {
+  menu.forEach((item) => {
     item.active = item.id === id
   })
 }
@@ -51,6 +51,8 @@ const deleteItem = () => {
     <el-tabs v-model="activeName" stretch class="demo-tabs">
       <el-tab-pane space-y-4 label="首页菜单" name="first">
         <div
+          v-for="item in menu"
+          :key="item.id"
           flex
           items-center
           border-2
@@ -59,23 +61,25 @@ const deleteItem = () => {
           border-purple-400
           cursor-pointer
           justify-center
-          v-for="item in menu"
-          key="item.id"
-          @click="handlerClick(item.id)"
           :style="{
             'border-color': item.active ? '#00997799' : '',
             'color': item.active ? '#00997799' : ''
           }"
+          @click="handlerClick(item.id)"
         >
           <div>{{ item.name }}</div>
         </div>
       </el-tab-pane>
       <el-tab-pane label="播放列表" name="second">
-        <button border rounded @click="store.clear()">清空</button>
+        <button border rounded @click="store.clear()">
+          清空
+        </button>
         <ul mt>
-          <li flex v-for="item in store.list" :key="item.id">
+          <li v-for="item in store.list" :key="item.id" flex>
             <div>{{ item.name }}</div>
-            <button ml-2 border @click="deleteItem">删除</button>
+            <button ml-2 border @click="deleteItem">
+              删除
+            </button>
           </li>
         </ul>
       </el-tab-pane>

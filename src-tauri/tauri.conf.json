@@ -62,7 +62,9 @@
         "title": "音乐播放器",
         "width": 1000,
         "decorations": false,
-        "transparent": true
+        "transparent": true,
+        "minHeight": 500,
+        "minWidth": 700
       }
     ]
   }

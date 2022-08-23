@@ -47,6 +47,7 @@ watch(
     } else {
       // 避免请求冲突，上一个请求还没回来，下一个又来了，就取消上面所有，鬼知道卡了多少个请求
       cancelAllRequest()
+      // eslint-disable-next-line no-use-before-define
       searchStart()
       isShowList = false
       isShowLoading = true
@@ -77,7 +78,8 @@ const searchStart = async() => {
       })
     })
   } catch (error) {
-    console.log(error)
+    // eslint-disable-next-line no-console
+    console.error(error)
   }
   isShowLoading = false
 }
@@ -87,6 +89,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredList, {
   itemHeight: 22
 })
 
+// 添加歌曲并立即播放，两者只会触发其一
 const addSong = async(id: number, name: string) => {
   const song = await request({
     url: `/song/url?id=${id}${import.meta.env.VITE_APP_ENDURL}`,
@@ -109,7 +112,7 @@ const addSong = async(id: number, name: string) => {
       .replace(',', '、')
   })
 }
-
+// 添加歌曲
 const addPush = async(id: number, name: string) => {
   const song = await request({
     url: `/song/url?id=${id}${import.meta.env.VITE_APP_ENDURL}`,
@@ -166,7 +169,7 @@ const addPush = async(id: number, name: string) => {
       <div v-bind="wrapperProps">
         <div
           v-for="item in list" :key="item.index" h-10 flex border-b-1 border-zinc-200 space-x-4 last-of-type:pb-3
-          items-center justify-between hover:bg-blue-100 @click="addSong(item.data.id, item.data.name)"
+          items-center overflow-y-hidden justify-between hover:bg-blue-100 @click="addSong(item.data.id, item.data.name)"
         >
           <div class="w-1/15" ml justify-self-start>
             {{ item.index + 1 }}
@@ -200,7 +203,7 @@ const addPush = async(id: number, name: string) => {
         {{ item.searchWord }} - {{ item.content }}
       </p> -->
       <p mt-3 border-b-1 border-zinc-400>
-        由于接口原因只能用上面搜索框
+        由于接口原因只能用上面搜索框。第一次搜索可能后端没反应过来，之后就行了
       </p>
     </div>
   </div>
