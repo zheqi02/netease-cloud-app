@@ -125,6 +125,11 @@ export const useMusicPlay = defineStore('musicPlay', {
       flag && this.list.unshift(obj)
     },
     addSongAndPlay(obj: SongData) {
+      let flag = true
+      this.list.forEach((item) => {
+        if (item.id === obj.id) flag = false
+      })
+      if (!flag) return
       this.addSongs(obj)
       this.current = 0
       this.play()
@@ -136,8 +141,8 @@ export const useMusicPlay = defineStore('musicPlay', {
       })
       flag && this.list.push(obj)
     },
-    delete() {
-      this.list.splice(this.current, 1)
+    delete(songName: string) {
+      this.list = this.list.filter(e => e.name !== songName)
       this.current = 0
       this.play()
     }
@@ -152,8 +157,7 @@ export const useMusicPlay = defineStore('musicPlay', {
       return state.list[state.current].singer
     },
     picUrl(state) {
-      if (state.list.length < 1)
-        return 'https://picsum.photos/200/300'
+      if (state.list.length < 1) return 'https://picsum.photos/200/300'
       return state.list[state.current].pic
     }
   }

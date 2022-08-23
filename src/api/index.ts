@@ -1,5 +1,5 @@
 import Request from './request'
-import { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
 
 import type { RequestConfig } from './request/types'
 
@@ -20,7 +20,7 @@ const request = new Request({
   withCredentials: true,
   interceptors: {
     // 请求拦截器
-    requestInterceptors: (config) => config,
+    requestInterceptors: config => config,
     // 响应拦截器
     responseInterceptors: (result: AxiosResponse) => {
       return result
@@ -37,9 +37,9 @@ const request = new Request({
  */
 const zqRequest = <D = any, T = any>(config: ZQRequestConfig<D, T>): Promise<any> => {
   const { method = 'GET' } = config
-  if (method === 'get' || method === 'GET') {
+  if (method === 'get' || method === 'GET')
     config.params = config.data
-  }
+
   return request.request<ZQResponse<T>>(config)
 }
 // 取消请求

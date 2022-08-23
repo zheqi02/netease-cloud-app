@@ -138,29 +138,31 @@ const addPush = async(id: number, name: string) => {
 </script>
 
 <template>
-  <div h-full w-full class="lg:w-70% lg:mx-15%">
+  <div h-full w-full text-neutral-700 p-x-2 class="lg:w-70% lg:mx-15%">
     <div h-24 flex justify-center items-center>
-      <div flex items-center w-60 lg:w-100 rounded border-2 border-sky-200>
+      <div flex items-center w-100 lg:w-150 rounded-full border border-sky-300>
+        <div w-10 flex justify-center items-center text-blue-300 h-10>
+          <div i-system-uicons:search text-3xl />
+        </div>
         <input
-          v-model="searchName" type="text" class="inp" w-60 lg:w-100 placeholder:italic placeholder:text-slate-400
-          focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm
+          v-model="searchName" type="text" class="inp" w-90 focus:outline-none lg:w-150 placeholder:italic placeholder:text-slate-400 p-2 sm:text-sm
         >
       </div>
     </div>
-    <div v-show="!isShowList" h-10 flex border-b-1 border-zinc-200 space-x-4 items-center justify-between>
-      <div class="w-1/15" ml justify-self-start>
+    <div v-show="!isShowList" text-zinc-500 h-10 flex border-b-1 border-zinc-300 space-x-4 items-center justify-between>
+      <div class="w-1/10" ml justify-self-start>
         排序
       </div>
-      <div justify-self-start>
+      <div class="w-1/10" justify-self-start>
         添加
       </div>
-      <div class="w-1/5" justify-self-start>
+      <div class="w-3/10" justify-self-start>
         歌曲
       </div>
-      <div class="w-1/5" justify-self-start>
+      <div class="w-3/10" justify-self-start>
         歌手
       </div>
-      <div class="w-1/5" justify-self-start>
+      <div class="w-2/10" justify-self-start>
         时长
       </div>
     </div>
@@ -171,19 +173,19 @@ const addPush = async(id: number, name: string) => {
           v-for="item in list" :key="item.index" h-10 flex border-b-1 border-zinc-200 space-x-4 last-of-type:pb-3
           items-center overflow-y-hidden justify-between hover:bg-blue-100 @click="addSong(item.data.id, item.data.name)"
         >
-          <div class="w-1/15" ml justify-self-start>
+          <div class="w-1/10" ml justify-self-start>
             {{ item.index + 1 }}
           </div>
-          <div w-5 h-5 @click.stop="addPush(item.data.id, item.data.name)">
+          <div class="w-1/10" h-5 @click.stop="addPush(item.data.id, item.data.name)">
             <div cursor-pointer justify-self-start text-lg i-mdi:cards-heart-outline />
           </div>
-          <div class="w-1/5" justify-self-start>
+          <div class="w-3/10" justify-self-start>
             {{ item.data.name }}
           </div>
-          <div class="w-1/5" justify-self-start>
+          <div class="w-3/10" justify-self-start>
             {{ item.data.ar }}
           </div>
-          <div class="w-1/5" justify-self-start>
+          <div class="w-2/10" justify-self-start>
             {{ item.data.dt }}
           </div>
         </div>
@@ -203,7 +205,13 @@ const addPush = async(id: number, name: string) => {
         {{ item.searchWord }} - {{ item.content }}
       </p> -->
       <p mt-3 border-b-1 border-zinc-400>
-        由于接口原因只能用上面搜索框。第一次搜索可能后端没反应过来，之后就行了
+        由于接口原因只能用上面搜索框。
+        <br>
+        第一次搜索可能后端没反应过来，之后就行了。
+        <br>
+        然后就是点击播放的时间长是因为接口返回问题
+        <br>
+        可能是部署在vercel上的问题吧，谁知道呢
       </p>
     </div>
   </div>

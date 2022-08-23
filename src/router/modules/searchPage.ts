@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/search',
+    path: '/',
     name: 'search',
     component: searchPage
   }

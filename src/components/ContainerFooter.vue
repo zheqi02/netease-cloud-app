@@ -4,7 +4,7 @@ import { useDebounceFn } from '@vueuse/core'
 import { useMusicPlay } from '@/store/musicPlay'
 
 const store = useMusicPlay()
-
+const pw = $computed(() => `${store.comTime}%`)
 const loopModeList = reactive<
   {
     dataIcon: string
@@ -66,11 +66,16 @@ const play = () => {
 </script>
 
 <template>
-  <div h-24 p-y-2 p-l-4 border-t-1 border-zinc-400 flex space-x-16 lg:justify-between lg:pr-64 items-center>
+  <div h-2px w-full>
+    <div h-full bg-sky-300 class="progress-bar" />
+  </div>
+  <div class="h-[calc(6rem-2px)]" p-y-2 p-l-4 border-zinc-300 flex space-x-16 lg:justify-between lg:pr-64 items-center>
     <div h-full flex>
-      <img rounded-lg block w-20 h-full class="img" :src="store.picUrl">
+      <img opacity-75 rounded-lg block md:w-20 w-30 h-full class="img" :src="store.picUrl">
       <div ml-10 flex flex-col justify-around text-sm class="status-text" h-full w-30>
-        <div>{{ store.musicName }}</div>
+        <div>
+          {{ store.musicName }}
+        </div>
         <div>{{ store.singer }}</div>
       </div>
     </div>
@@ -87,7 +92,7 @@ const play = () => {
         <div class="demonstration text-xs mr-5">
           {{ store.comTimes }}
         </div>
-        <el-slider v-model="store.comTime" :show-tooltip="false" @input="airborne" />
+        <el-slider v-model="store.comTime" :show-tooltip="false" opacity-75 @input="airborne" />
         <div class="demonstration text-xs ml-5">
           {{ store.totalTime }}
         </div>
@@ -113,5 +118,8 @@ const play = () => {
 <style scoped lang="scss">
 :deep(.el-slider__button-wrapper) {
   display: none;
+}
+.progress-bar {
+  width: v-bind(pw);
 }
 </style>

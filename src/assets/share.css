@@ -13,18 +13,14 @@
     #f7c978 100%
   );
 }
+
 .status-text {
   @apply text-transparent bg-clip-text;
   background-image: linear-gradient(
-    to left,
-    #dbdcd7 0%,
-    #dddcd7 24%,
-    #e2c9cc 30%,
-    #e7627d 46%,
-    #b8235a 59%,
-    #801357 71%,
-    #3d1635 84%,
-    #1c1a27 100%
+    -225deg,
+    #2cd8d5 0%,
+    #c5c1ff 56%,
+    #ffbac3 100%
   );
 }
 
@@ -40,5 +36,15 @@
     #f18271 75%,
     #f3a469 87%,
     #f7c978 100%
+  );
+}
+
+.icon-text {
+  @apply text-transparent bg-clip-text;
+  background-image: linear-gradient(
+    to top,
+    #d5dee7 0%,
+    #ffafbd 0%,
+    #c9ffbf 100%
   );
 }

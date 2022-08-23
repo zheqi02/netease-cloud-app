@@ -32,6 +32,10 @@ const statusBar = $ref<
     shortcut: 'F'
   },
   {
+    name: '排行',
+    shortcut: 'P'
+  },
+  {
     name: '歌单',
     shortcut: 'G'
   },
@@ -45,7 +49,7 @@ const statusBar = $ref<
   },
   {
     name: '设置',
-    shortcut: 'S'
+    shortcut: 'T'
   }
 ])
 
@@ -60,13 +64,13 @@ const handlerBar = (shortcut: string) => {
 
 <template>
   <div
-    data-tauri-drag-region border-b-1 border-zinc-400 rounded-tr rounded-tl flex justify-between items-center h-7
-    w-screen
+    data-tauri-drag-region select-none border-b-1 border-zinc-400 rounded-tr rounded-tl flex justify-between
+    items-center h-7 w-screen
   >
     <div pl-2 flex items-center space-x-4 class="rainbow-text">
       <img rounded h-4 src="/favicon.ico" alt="">
       <div
-        v-for="(item, index) in statusBar" :key="index" cursor-pointer underline-blue-600 hover:underline
+        v-for="(item, index) in statusBar" :key="index" cursor-pointer underline-zinc-500 hover:underline
         hover:underline-offset-2 text-sm @click="handlerBar(item.shortcut)"
       >
         {{ item.name }}({{ item.shortcut }})
