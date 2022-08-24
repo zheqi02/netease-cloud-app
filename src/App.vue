@@ -8,8 +8,10 @@ import ContainerFooter from './components/ContainerFooter.vue'
   <Suspense>
     <StatusBar />
   </Suspense>
-  <div select-none flex w-screen class="h-[calc(100vh-1.75rem-6rem)]">
-    <ContainerAside />
+  <div flex w-screen class="h-[calc(100vh-1.75rem-6rem)]">
+    <div select-none>
+      <ContainerAside />
+    </div>
     <main class="w-[calc(100vw-200px)]" overflow-hidden>
       <Suspense>
         <template #default>

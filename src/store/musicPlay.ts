@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import request from '@/api'
 import type { SongData } from './types'
 
 export const useMusicPlay = defineStore('musicPlay', {
@@ -15,7 +16,23 @@ export const useMusicPlay = defineStore('musicPlay', {
     comTime: number
     comTimes: string
     totalTime: string
+    lyric: string
+    isLyric: boolean
+    lyricTime: string
+    lyricPrevs: number
+    musicLyric: {
+      time: number
+      key: string
+      active: boolean
+    }[]
+    currentH: number
   } => ({
+    currentH: 0,
+    musicLyric: [],
+    lyricPrevs: 0,
+    lyricTime: '',
+    isLyric: false,
+    lyric: '',
     currentName: '',
     playing: false,
     loopMode: '列表循环',
@@ -43,11 +60,35 @@ export const useMusicPlay = defineStore('musicPlay', {
         this.playing = true
       }
     },
-    play() {
+    async play() {
       if (this.list.length < 1) return
+      this.currentH = 0
       if (this.musicDom) {
         this.musicDom.src = this.list[this.current].url
         this.currentName = this.list[this.current].name
+        const res = await request({
+          method: 'get',
+          url: `/lyric?id=${this.list[this.current].id}`
+        })
+        this.lyric = res.lrc.lyric
+        const s = this.lyric.split('\n')
+        this.musicLyric = []
+        s.forEach((e) => {
+          const time = e
+            .slice(1, 10)
+            .split(':')
+            .reduce((pre, cur, index) => {
+              if (index > 0) pre += Math.round(Number(cur) * 1000)
+              else pre += Number(Number(cur) * 60 * 1000)
+              return pre
+            }, 0)
+          const key = e.split(']')[1]
+          this.musicLyric.push({
+            time,
+            key,
+            active: false
+          })
+        })
         this.musicDom.play()
         this.playing = true
         this.timer = setInterval(() => {
@@ -148,8 +189,7 @@ export const useMusicPlay = defineStore('musicPlay', {
       this.list = this.list.filter(e => e.name !== songName)
 
       if (songName === this.currentName) {
-        if (this.current !== this.list.length)
-          this.play()
+        if (this.current !== this.list.length) this.play()
         else this.next()
       }
     }
@@ -166,6 +206,9 @@ export const useMusicPlay = defineStore('musicPlay', {
     picUrl(state) {
       if (state.list.length < 1) return 'https://picsum.photos/200/300'
       return state.list[state.current].pic
+    },
+    currentData(state) {
+      return Math.round(state.currentTime * 1000)
     }
   }
 })

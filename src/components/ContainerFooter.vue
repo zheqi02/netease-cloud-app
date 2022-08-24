@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
+import { useRouter } from 'vue-router'
 import { useMusicPlay } from '@/store/musicPlay'
 
+const router = useRouter()
 const store = useMusicPlay()
 const pw = $computed(() => `${store.comTime}%`)
 const loopModeList = reactive<
@@ -63,6 +65,10 @@ const play = () => {
   else
     store.playStart()
 }
+
+const toLyricPage = () => {
+  router.push('/lyric')
+}
 </script>
 
 <template>
@@ -106,7 +112,7 @@ const play = () => {
           </div>
         </template>
       </div>
-      <div text-sm text-sky-400 hover:text-red-400 cursor-pointer>
+      <div text-sm text-sky-400 hover:text-red-400 cursor-pointer @click="toLyricPage">
         词
       </div>
       <div i-ic:baseline-volume-up />

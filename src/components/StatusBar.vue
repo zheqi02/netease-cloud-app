@@ -56,7 +56,7 @@ const statusBar = $ref<
 const handlerBar = (shortcut: string) => {
   switch (shortcut) {
     case 'F':
-      router.push('/search')
+      router.push('/')
       break
   }
 }
